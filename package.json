@@ -1,6 +1,6 @@
 {
   "name": "jurisai-pro",
-  "version": "1.0.0",
+  "version": "2.0.0",
   "description": "JurisAI Pro — AI-Powered Legal Intelligence Platform",
   "main": "server.js",
   "scripts": {
