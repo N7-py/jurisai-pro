@@ -1,0 +1,17 @@
+{
+  "users": [
+    {
+      "id": "1772052833792",
+      "email": "test@example.com",
+      "password": "$2b$10$OjPavemKRoDiXYjPD7tMeed9BEzk8dyzznIa.OETXxJAni/zqG1iG",
+      "queries_used": 1,
+      "exhausted_at": null
+    }
+  ],
+  "ips": [
+    {
+      "ip": "::1",
+      "queries_used": 2
+    }
+  ]
+}
