@@ -25,9 +25,15 @@ app.set('trust proxy', 1);
 // Serve static files (index.html, styles.css, app.js)
 app.use(express.static(path.join(__dirname, 'public')));
 
-const openai = new OpenAI({
-    apiKey: OPENAI_API_KEY,
-});
+// OpenAI client — initialized on first use to avoid crashing if env var is missing at startup
+let _openai = null;
+function getOpenAI() {
+    if (!_openai) {
+        if (!OPENAI_API_KEY) throw new Error('OPENAI_API_KEY is not set in environment variables.');
+        _openai = new OpenAI({ apiKey: OPENAI_API_KEY });
+    }
+    return _openai;
+}
 
 // ===== Database Setup =====
 async function readDB() {
@@ -178,7 +184,7 @@ app.post('/api/chat', rateLimitMiddleware, async (req, res) => {
             return res.status(400).json({ error: 'Need an array of messages.' });
         }
 
-        const completion = await openai.chat.completions.create({
+        const completion = await getOpenAI().chat.completions.create({
             model: "gpt-4o-mini",
             messages: messages,
             temperature: 0.5,
