@@ -272,7 +272,7 @@ app.post('/api/chat', rateLimitMiddleware, async (req, res) => {
             model: "gpt-4o",
             messages: messages,
             temperature: 0.15,      // Low temperature → factual, legally precise
-            max_tokens: 4000,       // Allow full-length structured legal reports
+            max_tokens: 4096,       // Uncapped physical limit to support 10-15 page Exhaustive reports
             top_p: 0.9,             // Focused vocabulary for legal language
             frequency_penalty: 0.2, // Reduce repetitive phrasing
             presence_penalty: 0.1,  // Encourage covering all required sections
