@@ -10,6 +10,59 @@ const OpenAI = require('openai');
 const fs = require('fs').promises;
 const bcrypt = require('bcryptjs');
 const jwt = require('jsonwebtoken');
+const nodemailer = require('nodemailer');
+const crypto = require('crypto');
+
+// ===== Email Verification Setup =====
+let transporter = null;
+async function initMailer() {
+    if (process.env.SMTP_USER && process.env.SMTP_PASS) {
+        transporter = nodemailer.createTransport({
+            host: process.env.SMTP_HOST || 'smtp.gmail.com',
+            port: process.env.SMTP_PORT || 587,
+            secure: process.env.SMTP_SECURE === 'true',
+            auth: {
+                user: process.env.SMTP_USER,
+                pass: process.env.SMTP_PASS
+            }
+        });
+        console.log("Custom SMTP Transporter initialized.");
+    } else {
+        // Fallback to ethereal for testing if no credentials are provided
+        const testAccount = await nodemailer.createTestAccount();
+        transporter = nodemailer.createTransport({
+            host: 'smtp.ethereal.email',
+            port: 587,
+            secure: false,
+            auth: {
+                user: testAccount.user,
+                pass: testAccount.pass
+            }
+        });
+        console.log("Mock Ethereal Transporter initialized. Check console for verification links.");
+    }
+}
+initMailer().catch(console.error);
+
+async function sendVerificationEmail(email, token, baseUrl) {
+    if (!transporter) return;
+    const verifyLink = `${baseUrl}/api/verify-email?token=${token}`;
+
+    const info = await transporter.sendMail({
+        from: '"JurisAI Pro" <noreply@jurisai-pro.com>',
+        to: email,
+        subject: "Verify your email for JurisAI Pro",
+        text: `Please verify your email by clicking this link: ${verifyLink}`,
+        html: `<p>Welcome to JurisAI Pro!</p><p>Please <a href="${verifyLink}">click here to verify your email</a> and unlock your 10 daily queries.</p>`
+    });
+
+    if (!process.env.SMTP_USER) {
+        console.log("==================================================");
+        console.log("Verification Email URL for %s:", email);
+        console.log(nodemailer.getTestMessageUrl(info));
+        console.log("==================================================");
+    }
+}
 
 const app = express();
 const PORT = process.env.PORT || 3000;
@@ -71,11 +124,17 @@ app.post('/api/signup', async (req, res) => {
             email,
             password: hashedPassword,
             queries_used: 0,
-            exhausted_at: null
+            exhausted_at: null,
+            is_verified: false,
+            verification_token: crypto.randomBytes(16).toString('hex')
         };
 
         db.users.push(newUser);
         await writeDB(db);
+
+        // Send Email
+        const baseUrl = `${req.protocol}://${req.get('host')}`;
+        sendVerificationEmail(email, newUser.verification_token, baseUrl).catch(console.error);
 
         const token = jwt.sign({ id: newUser.id }, JWT_SECRET, { expiresIn: '7d' });
         res.json({ token, message: 'Signup successful' });
@@ -105,6 +164,27 @@ app.post('/api/login', async (req, res) => {
     }
 });
 
+app.get('/api/verify-email', async (req, res) => {
+    try {
+        const { token } = req.query;
+        if (!token) return res.status(400).send("No token provided");
+
+        const db = await readDB();
+        const user = db.users.find(u => u.verification_token === token);
+        if (!user) return res.status(400).send("Invalid or expired token");
+
+        user.is_verified = true;
+        user.verification_token = null; // consume token
+        await writeDB(db);
+
+        // Redirect to homepage with a success parameter
+        res.redirect('/?verified=true');
+    } catch (err) {
+        console.error('Verify error:', err);
+        res.status(500).send("Server error");
+    }
+});
+
 // ===== Rate Limiting Middleware =====
 async function rateLimitMiddleware(req, res, next) {
     try {
@@ -121,21 +201,25 @@ async function rateLimitMiddleware(req, res, next) {
                 if (!user) return res.status(401).json({ error: 'Invalid token' });
 
                 const now = Date.now();
-                if (user.queries_used >= 10) {
-                    if (user.exhausted_at && (now - user.exhausted_at >= 24 * 60 * 60 * 1000)) {
+                const limit = user.is_verified ? 10 : 2;
+
+                if (user.queries_used >= limit) {
+                    if (user.is_verified && user.exhausted_at && (now - user.exhausted_at >= 24 * 60 * 60 * 1000)) {
                         // 24 hours have passed, reset limit
                         user.queries_used = 1;
                         user.exhausted_at = null;
                         await writeDB(db);
                         req.user = user;
                         return next();
+                    } else if (!user.is_verified) {
+                        return res.status(403).json({ error: 'Please verify your email address to unlock your 10 daily queries. Check your inbox/spam folder.' });
                     } else {
                         return res.status(403).json({ error: 'Limit for the day exhausted. Come back again tomorrow.' });
                     }
                 }
 
                 user.queries_used += 1;
-                if (user.queries_used >= 10) {
+                if (user.queries_used >= 10 && user.is_verified) {
                     user.exhausted_at = now;
                 }
                 await writeDB(db);
