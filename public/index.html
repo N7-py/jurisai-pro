@@ -244,8 +244,30 @@
                                 style="width: 100%; box-sizing: border-box; background: rgba(255, 255, 255, 0.9); border: 1px solid rgba(0, 0, 0, 0.2); border-radius: 8px; color: #1a1a1a; padding: 1rem; resize: vertical; font-family: inherit; font-size: 0.95rem; transition: border-color 0.2s;"
                                 placeholder="Ask any specific question related to your case details..."></textarea>
                         </div>
+                    </div>
+
+                    <div style="display: flex; align-items: center; justify-content: space-between; gap: 1rem;">
+                        <div style="display: flex; flex-direction: column; gap: 0.5rem; flex: 1;">
+                            <label style="font-size: 0.9rem; font-weight: 500; color: #d4a853;">3. Review Type</label>
+                            <div
+                                style="display: flex; gap: 1.5rem; background: rgba(0,0,0,0.4); padding: 0.75rem 1rem; border-radius: 8px; border: 1px solid rgba(255,255,255,0.1);">
+                                <label
+                                    style="color: #fff; font-size: 0.9rem; display: flex; align-items: center; gap: 0.5rem; cursor: pointer;">
+                                    <input type="radio" name="reviewType" value="summarised"
+                                        style="accent-color: #d4a853;">
+                                    Summarised (1-2 pages)
+                                </label>
+                                <label
+                                    style="color: #fff; font-size: 0.9rem; display: flex; align-items: center; gap: 0.5rem; cursor: pointer;">
+                                    <input type="radio" name="reviewType" value="exhaustive" checked
+                                        style="accent-color: #d4a853;">
+                                    Exhaustive (Deep Research)
+                                </label>
+                            </div>
+                        </div>
+
                         <button id="chatSendBtn" class="btn btn-primary"
-                            style="display: flex; align-items: center; justify-content: center; padding: 0 1.5rem; height: 56px; border-radius: 8px; margin-bottom: 4px;">
+                            style="display: flex; align-items: center; justify-content: center; padding: 0 1.5rem; height: 56px; border-radius: 8px; margin-top: auto;">
                             <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor"
                                 stroke-width="2" style="margin-left: 2px;">
                                 <path d="M22 2L11 13M22 2l-7 20-4-9-9-4 20-7z"></path>
