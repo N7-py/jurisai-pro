@@ -408,28 +408,13 @@ In sum, the mere fact that a scheme promised in court has later been suspended d
                     scale: 2,
                     useCORS: true,
                     letterRendering: true,
-                    windowWidth: 800,
-                    scrollY: 0,
-                    scrollX: 0 // fixes the blank pages issue caused by window scroll position
+                    scrollY: 0 // fixes the blank pages issue caused by window scroll position
                 },
                 jsPDF: { unit: 'mm', format: 'a4', orientation: 'portrait' },
                 pagebreak: { mode: ['avoid-all', 'css', 'legacy'] }
             };
 
-            // Fix blank pages: append the element to the DOM temporarily
-            pdfContainer.style.position = 'absolute';
-            pdfContainer.style.left = '-9999px';
-            pdfContainer.style.top = '0';
-            pdfContainer.style.width = '800px';
-            document.body.appendChild(pdfContainer);
-
-            try {
-                await html2pdf().set(opt).from(pdfContainer).save();
-            } finally {
-                if (document.body.contains(pdfContainer)) {
-                    document.body.removeChild(pdfContainer);
-                }
-            }
+            await html2pdf().set(opt).from(pdfContainer).save();
         });
 
         historyDiv.appendChild(bubble);
