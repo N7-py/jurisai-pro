@@ -482,6 +482,15 @@ In sum, the mere fact that a scheme promised in court has later been suspended d
             combinedText += (combinedText ? '\n\n' : '') + `Question: \n${question} `;
         }
 
+        const reviewTypeRadio = document.querySelector('input[name="reviewType"]:checked');
+        const reviewType = reviewTypeRadio ? reviewTypeRadio.value : 'exhaustive';
+
+        if (reviewType === 'summarised') {
+            combinedText += `\n\n[ACTION REQUIRED: Generate a SUMMARISED report. You must provide a concise, highly focused 1-2 page summary of the legal position, while strictly adhering to the 10-section structure. Keep all answers brief but accurate.]`;
+        } else {
+            combinedText += `\n\n[ACTION REQUIRED: Generate an EXTREMELY EXHAUSTIVE report. You must provide an incredibly detailed, comprehensive legal research report equivalent to 10-15 pages in length. Expand aggressively on every single section with extreme depth, multiple massive paragraphs per issue, and exhaustive granular legal analysis. Leave no detail unexamined. Maximize the output length.]`;
+        }
+
         if (caseDetailsField) caseDetailsField.value = '';
         if (questionField) questionField.value = '';
 
