@@ -109,38 +109,22 @@ The Supreme Court in *Babu Ram Gupta v. Sudhir Bhasin* drew a sharp distinction 
 
 The Court held that unless there is an express undertaking to the Court, or such an undertaking is expressly incorporated in the order, breach will not ordinarily amount to civil contempt; breach of a mere compromise or consent term is not, by itself, contempt.
 
-### Judicial Interpretation / Cases / Analysis
+### 5. Landmark Case References
 
-**1. What counts as an “undertaking given to a Court”?**
-**(a) Requirement of a clear, express undertaking**
-- *Babu Ram Gupta v. Sudhir Bhasin, (1979) 3 SCC 47*: the High Court treated a consent order appointing a receiver as if it contained an implied undertaking to hand over possession. The Supreme Court reversed, holding:
-  - There was no application, affidavit, or recorded oral undertaking by the party to hand over possession.
-  - The Court cannot “assume an implied undertaking when there is none on the record”.
-  - Breach of a compromise/consent order, without a specific undertaking to the Court, is not civil contempt; the remedy is in execution or substantive proceedings.
+**1. Babu Ram Gupta v. Sudhir Bhasin, (1979) 3 SCC 47**
+- **Case Summary:** In this case, a dispute regarding a receivership led to a consent order being passed by the High Court appointing a receiver to manage the property. The High Court later held the party in civil contempt for allegedly breaching an "implied undertaking" to physically hand over possession of the property to the receiver. The Supreme Court reversed this decision upon appeal, finding that the contemnor had never submitted a formal application, affidavit, or explicitly recorded oral statement undertaking to hand over possession. The Court clarified the boundaries of civil contempt in consent decrees.
+- **Critical Points & Ratio Decidendi:** The Supreme Court established that an "implied undertaking" cannot be legally assumed simply because a consent order was passed; there must be a clear, express undertaking recorded by the Court to attract civil contempt. Mere breach of a compromise or consent term without a specific undertaking to the Court is not contempt, and the remedy lies instead in execution proceedings.
+- **Relevance to Present Facts:** This case is highly relevant because it dictates that unless the Advocate General explicitly placed a recorded undertaking "to the Court" regarding the SEPL scheme, as opposed to a mere policy assurance, the subsequent suspension will likely not meet the strict threshold for civil contempt.
 
-**(b) Breach of a clear undertaking is contempt**
-- *Bank of Baroda v. Sadruddin Hasan Daya, (2004) 1 SCC 360*:
-  - Consent terms in the Supreme Court contained an explicit undertaking that the judgment‑debtors would not alienate or encumber certain properties till the decree was satisfied.
-  - Acting on this, the Court passed a consent decree. The respondents then encumbered the properties.
-  - Held: this was “wilful breach of an undertaking given to the Court”, squarely falling within Section 2(b).
+**2. Bank of Baroda v. Sadruddin Hasan Daya, (2004) 1 SCC 360**
+- **Case Summary:** During ongoing litigation over financial defaults, the judgment-debtors and the Bank of Baroda filed joint consent terms in the Supreme Court to settle the dispute. Within these consent terms, the debtors explicitly undertook and promised the Court that they would not alienate, sell, or encumber specific properties until the decree was fully satisfied. Based heavily on this explicit promise, the Court passed a consent decree. Subsequently, in direct violation of this recorded promise, the respondents encumbered the properties and attempted to shield them from recovery efforts.
+- **Critical Points & Ratio Decidendi:** The Court ruled that violating an explicit promise embedded within consent terms upon which the Court relied constitutes a "wilful breach of an undertaking given to the Court". The ratio firmly establishes that the Court's reliance on the statement elevates the breach to an act of civil contempt under Section 2(b).
+- **Relevance to Present Facts:** If the petitioner can demonstrate that the High Court actively relied upon the Advocate General's statement regarding the SEPL scheme to dispose of the matter, this judgment strongly supports the argument that the subsequent suspension constitutes actionable civil contempt.
 
-- *Rama Narang v. Ramesh Narang, (2006) 11 SCC 114*:
-  - The Court clarified that Section 2(b) has two distinct limbs: (1) wilful disobedience of any order; (2) wilful breach of an undertaking given to the Court.
-  - It reaffirmed that wilful breach of a clear undertaking to the Court constitutes civil contempt and punished the contemnors for violating undertakings concerning operation of company bank accounts.
-
-- *Reliance Communication Ltd. v. State Bank of India & Ors.* (Ericsson contempt):
-  - RCom had given a specific undertaking to the Supreme Court to pay a fixed sum to Ericsson; they failed to pay.
-  - The Court held there was “no doubt whatsoever” that the companies had “wilfully not paid” and “breached the undertakings given to this Court”, and punished them for contempt.
-
-- *In Re: Patanjali Ayurved Ltd (2024)*:
-  - The Supreme Court analysed at length that wilful breach of an undertaking given to the Court is as much civil contempt as wilful disobedience of an order.
-  - It emphasised the difference between (i) an undertaking given to the Court, and (ii) a promise/assurance given only to the other party – only the former attracts Section 2(b).
-
-**(c) Undertakings given through advocates / law officers**
-- In *In Re: Patanjali*, the Court specifically dealt with undertakings given through counsel, holding that a categorical statement made by counsel/advocate on instructions and recorded by the Court can amount to an undertaking “to the Court”; its wilful breach is civil contempt.
-- Earlier cases also accept that an undertaking can be given by counsel, provided it is clearly recorded and attributable to the party; the Court then acts on it.
-
-Applied to your facts, an assurance by the Advocate General in a writ that “the scheme will be implemented”, if recorded in the order and acted upon by the Court (for example, disposing of the petition on that footing) is capable of amounting to an “undertaking given to the Court” for purposes of Section 2(b). Whether it actually does will depend on the precision and context of the recording.
+**3. In Re: Patanjali Ayurved Ltd (2024)**
+- **Case Summary:** This high-profile suo motu contempt case involved Patanjali Ayurved making misleading advertisements regarding medicinal cures despite having previously given an undertaking to the Supreme Court. The company's legal counsel had specifically assured the Court, on instructions from the management, that no such advertisements would be published in the future. When the company continued its advertising campaign, the Supreme Court initiated contempt proceedings, taking severe exception to the blatant disregard for the recorded statements made by their advocates. The management attempted to claim the undertaking was not binding on them directly, which the Court rejected.
+- **Critical Points & Ratio Decidendi:** The Supreme Court exhaustively analyzed Section 2(b) and ruled that a categorical statement made by a legal counsel on behalf of a client, when recorded and acted upon by the Court, carries the exact same legal weight as a personal undertaking. The Court additionally emphasized the strict dividing line between a general promise made to an opposing party versus a solemn undertaking made to the Court itself.
+- **Relevance to Present Facts:** This conclusively shuts down any defense that the Advocate General's statement cannot be treated as a binding undertaking; if the AG made a recorded statement promising the scheme's implementation, the State is fully bound by it, and its breach triggers the contempt jurisdiction.
 
 **2. “Wilful” breach versus policy change / supervening events**
 **(a) Threshold of wilfulness**
