@@ -351,39 +351,38 @@ In sum, the mere fact that a scheme promised in court has later been suspended d
             });
         });
 
-        exportBtn.addEventListener('click', () => {
-            const { jsPDF } = window.jspdf;
-            const doc = new jsPDF({ unit: 'mm', format: 'a4' });
-            const pageW = doc.internal.pageSize.getWidth();
-            const margin = 15;
-            const usableW = pageW - margin * 2;
-            let y = 20;
+        exportBtn.addEventListener('click', async () => {
+            const originalContent = bubble.querySelector('.msg-content');
 
-            // Header
-            doc.setFontSize(16);
-            doc.setTextColor(180, 130, 50);
-            doc.text('JurisAI Pro — Legal Report', margin, y);
-            y += 7;
-            doc.setFontSize(8);
-            doc.setTextColor(130, 130, 130);
-            doc.text(`Generated: ${new Date().toLocaleString('en-IN')}`, margin, y);
-            y += 8;
-            doc.setDrawColor(180, 130, 50);
-            doc.setLineWidth(0.4);
-            doc.line(margin, y, pageW - margin, y);
-            y += 8;
+            // Clone the content so we don't mess up the live UI
+            const clonedContent = originalContent.cloneNode(true);
 
-            // Body text
-            doc.setFontSize(10);
-            doc.setTextColor(30, 30, 30);
-            const plainText = text.replace(/#{1,4} /g, '').replace(/\*\*(.*?)\*\*/g, '$1').replace(/\*(.*?)\*/g, '$1');
-            const lines = doc.splitTextToSize(plainText, usableW);
-            lines.forEach(line => {
-                if (y > 275) { doc.addPage(); y = 20; }
-                doc.text(line, margin, y);
-                y += 6;
-            });
-            doc.save('JurisAI_Legal_Report.pdf');
+            // Create a wrapper to enforce the dark theme styling for the PDF
+            const pdfContainer = document.createElement('div');
+            pdfContainer.style.background = '#0d1220'; // Match var(--bg-secondary)
+            pdfContainer.style.color = '#e8eaf0'; // Match var(--text-primary)
+            pdfContainer.style.padding = '30px';
+            pdfContainer.style.fontFamily = "'Inter', -apple-system, BlinkMacSystemFont, sans-serif";
+
+            // Add a header
+            const header = document.createElement('div');
+            header.innerHTML = `<h2 style="color:#d4a853; font-family:'Playfair Display', serif; border-bottom:1px solid rgba(212,168,83,0.3); padding-bottom:10px; margin-bottom:5px;">JurisAI Pro — Legal Report</h2>
+                                <p style="color:#8b92a8; font-size:12px; margin-bottom:30px;">Generated: ${new Date().toLocaleString('en-IN')}</p>`;
+            pdfContainer.appendChild(header);
+
+            // Append the cloned AI report content
+            pdfContainer.appendChild(clonedContent);
+
+            // Generate PDF
+            const opt = {
+                margin: 10,
+                filename: 'JurisAI_Legal_Report.pdf',
+                image: { type: 'jpeg', quality: 0.98 },
+                html2canvas: { scale: 2, useCORS: true, letterRendering: true },
+                jsPDF: { unit: 'mm', format: 'a4', orientation: 'portrait' }
+            };
+
+            await html2pdf().set(opt).from(pdfContainer).save();
         });
 
         historyDiv.appendChild(bubble);
@@ -438,10 +437,10 @@ In sum, the mere fact that a scheme promised in court has later been suspended d
 
         let combinedText = '';
         if (caseDetails) {
-            combinedText += `Case Details:\n${caseDetails}`;
+            combinedText += `Case Details: \n${caseDetails} `;
         }
         if (question) {
-            combinedText += (combinedText ? '\n\n' : '') + `Question:\n${question}`;
+            combinedText += (combinedText ? '\n\n' : '') + `Question: \n${question} `;
         }
 
         if (caseDetailsField) caseDetailsField.value = '';
