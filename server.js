@@ -185,9 +185,13 @@ app.post('/api/chat', rateLimitMiddleware, async (req, res) => {
         }
 
         const completion = await getOpenAI().chat.completions.create({
-            model: "gpt-4o-mini",
+            model: "gpt-4o",
             messages: messages,
-            temperature: 0.5,
+            temperature: 0.15,      // Low temperature → factual, legally precise
+            max_tokens: 4000,       // Allow full-length structured legal reports
+            top_p: 0.9,             // Focused vocabulary for legal language
+            frequency_penalty: 0.2, // Reduce repetitive phrasing
+            presence_penalty: 0.1,  // Encourage covering all required sections
         });
 
         res.json({ result: completion.choices[0].message.content });
