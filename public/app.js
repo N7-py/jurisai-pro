@@ -404,12 +404,32 @@ In sum, the mere fact that a scheme promised in court has later been suspended d
                 margin: [15, 15, 15, 15], // Top, Left, Bottom, Right
                 filename: 'JurisAI_Legal_Report.pdf',
                 image: { type: 'jpeg', quality: 0.98 },
-                html2canvas: { scale: 2, useCORS: true, letterRendering: true },
+                html2canvas: {
+                    scale: 2,
+                    useCORS: true,
+                    letterRendering: true,
+                    windowWidth: 800,
+                    scrollY: 0,
+                    scrollX: 0 // fixes the blank pages issue caused by window scroll position
+                },
                 jsPDF: { unit: 'mm', format: 'a4', orientation: 'portrait' },
                 pagebreak: { mode: ['avoid-all', 'css', 'legacy'] }
             };
 
-            await html2pdf().set(opt).from(pdfContainer).save();
+            // Fix blank pages: append the element to the DOM temporarily
+            pdfContainer.style.position = 'absolute';
+            pdfContainer.style.left = '-9999px';
+            pdfContainer.style.top = '0';
+            pdfContainer.style.width = '800px';
+            document.body.appendChild(pdfContainer);
+
+            try {
+                await html2pdf().set(opt).from(pdfContainer).save();
+            } finally {
+                if (document.body.contains(pdfContainer)) {
+                    document.body.removeChild(pdfContainer);
+                }
+            }
         });
 
         historyDiv.appendChild(bubble);
