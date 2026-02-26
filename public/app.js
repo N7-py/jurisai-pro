@@ -414,7 +414,10 @@ In sum, the mere fact that a scheme promised in court has later been suspended d
                 pagebreak: { mode: ['avoid-all', 'css', 'legacy'] }
             };
 
-            await html2pdf().set(opt).from(pdfContainer).save();
+            // Convert the detached DOM element into a plain HTML string.
+            // Passing a string forces html2pdf to build a hidden, isolated iframe, 
+            // completely neutralizing all scroll/bounding-box bugs that cause blank PDFs.
+            await html2pdf().set(opt).from(pdfContainer.outerHTML).save();
         });
 
         historyDiv.appendChild(bubble);
