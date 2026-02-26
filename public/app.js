@@ -357,6 +357,15 @@ In sum, the mere fact that a scheme promised in court has later been suspended d
             // Clone the content so we don't mess up the live UI
             const clonedContent = originalContent.cloneNode(true);
 
+            // Enhance headings for PDF export as requested
+            clonedContent.querySelectorAll('h2, h3, h4').forEach(h => {
+                h.style.fontWeight = 'bold';
+                h.style.textDecoration = 'underline';
+                if (h.tagName === 'H2') h.style.fontSize = '1.5rem';
+                else if (h.tagName === 'H3') h.style.fontSize = '1.3rem';
+                else if (h.tagName === 'H4') h.style.fontSize = '1.1rem';
+            });
+
             // Create a wrapper to enforce the dark theme styling for the PDF
             const pdfContainer = document.createElement('div');
             pdfContainer.style.background = '#0d1220'; // Match var(--bg-secondary)
