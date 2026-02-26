@@ -37,8 +37,9 @@ For EACH issue, cite:
 ### 5. Landmark Case References
 Cite at least 3–5 relevant Supreme Court or High Court judgments with:
 - Case name and year (e.g., *AIR 2005 SC 3109*)
-- Key ratio decidendi / principle established
-- How it applies to the present facts
+- A detailed case summary of at least 4 to 5 sentences explaining the facts and outcome.
+- The critical points and ratio decidendi established in the judgment.
+- How it directly applies to the present facts.
 
 ### 6. Detailed Legal Analysis
 Provide a thorough, section-by-section analysis of the legal position. Examine each issue separately. Argue both sides where applicable. Apply facts to law with precision.
@@ -439,14 +440,14 @@ In sum, the mere fact that a scheme promised in court has later been suspended d
         bubble.className = 'chat-bubble ai';
         bubble.style.cssText = 'background: rgba(45,45,55,0.6); padding: 1.25rem; border-radius: 12px; border-bottom-left-radius: 0; max-width: 85%; align-self: flex-start; border: 1px solid rgba(255,255,255,0.05); color: #fff; line-height: 1.6; font-size: 0.95rem; display: flex; align-items: center; gap: 0.5rem;';
         bubble.innerHTML = `
-                < div class="typing-indicator" style = "display: flex; gap: 4px;" >
+            <div class="typing-indicator" style="display: flex; gap: 4px;">
                 <span style="width: 6px; height: 6px; background: #d4a853; border-radius: 50%; animation: ping 1.4s infinite both;"></span>
                 <span style="width: 6px; height: 6px; background: #d4a853; border-radius: 50%; animation: ping 1.4s infinite both; animation-delay: 0.2s;"></span>
                 <span style="width: 6px; height: 6px; background: #d4a853; border-radius: 50%; animation: ping 1.4s infinite both; animation-delay: 0.4s;"></span>
-            </div >
+            </div>
             <p style="margin: 0; color: var(--text-secondary); font-size: 0.85rem;">Reviewing laws...</p>
             <style>@keyframes ping { 0%, 80%, 100% { transform: scale(0); } 40% { transform: scale(1); } }</style>
-            `;
+        `;
         historyDiv.appendChild(bubble);
         historyDiv.scrollTop = historyDiv.scrollHeight;
     }
