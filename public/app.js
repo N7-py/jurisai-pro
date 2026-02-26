@@ -353,42 +353,75 @@ In sum, the mere fact that a scheme promised in court has later been suspended d
 
         exportBtn.addEventListener('click', async () => {
             const originalContent = bubble.querySelector('.msg-content');
-
-            // Clone the content so we don't mess up the live UI
             const clonedContent = originalContent.cloneNode(true);
 
-            // Enhance headings for PDF export as requested
-            clonedContent.querySelectorAll('h2, h3, h4').forEach(h => {
-                h.style.fontWeight = 'bold';
-                h.style.textDecoration = 'underline';
-                if (h.tagName === 'H2') h.style.fontSize = '1.5rem';
-                else if (h.tagName === 'H3') h.style.fontSize = '1.3rem';
-                else if (h.tagName === 'H4') h.style.fontSize = '1.1rem';
-            });
-
-            // Create a wrapper to enforce the dark theme styling for the PDF
+            // Build a clean, professional, white-background PDF container
             const pdfContainer = document.createElement('div');
-            pdfContainer.style.background = '#0d1220'; // Match var(--bg-secondary)
-            pdfContainer.style.color = '#e8eaf0'; // Match var(--text-primary)
-            pdfContainer.style.padding = '30px';
-            pdfContainer.style.fontFamily = "'Inter', -apple-system, BlinkMacSystemFont, sans-serif";
+            pdfContainer.style.background = '#ffffff';
+            pdfContainer.style.color = '#000000';
+            pdfContainer.style.padding = '20px';
+            pdfContainer.style.fontFamily = "'Times New Roman', Times, serif";
+            pdfContainer.style.lineHeight = '1.6';
 
-            // Add a header
+            // Add a formal header
             const header = document.createElement('div');
-            header.innerHTML = `<h2 style="color:#d4a853; font-family:'Playfair Display', serif; border-bottom:1px solid rgba(212,168,83,0.3); padding-bottom:10px; margin-bottom:5px;">JurisAI Pro — Legal Report</h2>
-                                <p style="color:#8b92a8; font-size:12px; margin-bottom:30px;">Generated: ${new Date().toLocaleString('en-IN')}</p>`;
+            header.style.textAlign = 'center';
+            header.style.marginBottom = '30px';
+            header.innerHTML = `
+                <h1 style="color:#000000; font-family:'Times New Roman', Times, serif; font-size: 24px; font-weight: bold; margin: 0; text-transform: uppercase;">JurisAI Pro — Legal Report</h1>
+                <hr style="border: 0; border-top: 2px solid #000; margin: 10px 0;">
+                <p style="color:#555555; font-size:12px; margin:0;">Generated: ${new Date().toLocaleString('en-IN')}</p>
+            `;
             pdfContainer.appendChild(header);
 
-            // Append the cloned AI report content
+            // Strip UI colors/styles and format for printing
+            clonedContent.querySelectorAll('*').forEach(el => {
+                el.style.color = '#000000'; // Force black text
+                if (el.tagName !== 'CODE') el.style.background = 'transparent';
+                if (el.tagName === 'HR') el.style.borderTopColor = '#000000';
+            });
+
+            // Format Headings exactly as requested: larger size, bold, underlined
+            clonedContent.querySelectorAll('h2').forEach(h => {
+                h.style.fontSize = '22px';
+                h.style.fontWeight = 'bold';
+                h.style.textDecoration = 'underline';
+                h.style.marginTop = '24px';
+                h.style.marginBottom = '12px';
+            });
+
+            clonedContent.querySelectorAll('h3').forEach(h => {
+                h.style.fontSize = '18px';
+                h.style.fontWeight = 'bold';
+                h.style.marginTop = '20px';
+                h.style.marginBottom = '10px';
+                h.style.textDecoration = 'underline';
+            });
+
+            clonedContent.querySelectorAll('h4').forEach(h => {
+                h.style.fontSize = '16px';
+                h.style.fontWeight = 'bold';
+                h.style.marginTop = '16px';
+                h.style.marginBottom = '8px';
+            });
+
+            // Format body text
+            clonedContent.querySelectorAll('p, li').forEach(el => {
+                el.style.fontSize = '12pt';
+                el.style.textAlign = 'justify';
+                el.style.marginBottom = '10px';
+            });
+
             pdfContainer.appendChild(clonedContent);
 
-            // Generate PDF
+            // Generate PDF with pagebreak settings to prevent awkward cuts
             const opt = {
-                margin: 10,
+                margin: [15, 15, 15, 15], // Top, Left, Bottom, Right
                 filename: 'JurisAI_Legal_Report.pdf',
                 image: { type: 'jpeg', quality: 0.98 },
                 html2canvas: { scale: 2, useCORS: true, letterRendering: true },
-                jsPDF: { unit: 'mm', format: 'a4', orientation: 'portrait' }
+                jsPDF: { unit: 'mm', format: 'a4', orientation: 'portrait' },
+                pagebreak: { mode: ['avoid-all', 'css', 'legacy'] }
             };
 
             await html2pdf().set(opt).from(pdfContainer).save();
@@ -406,14 +439,14 @@ In sum, the mere fact that a scheme promised in court has later been suspended d
         bubble.className = 'chat-bubble ai';
         bubble.style.cssText = 'background: rgba(45,45,55,0.6); padding: 1.25rem; border-radius: 12px; border-bottom-left-radius: 0; max-width: 85%; align-self: flex-start; border: 1px solid rgba(255,255,255,0.05); color: #fff; line-height: 1.6; font-size: 0.95rem; display: flex; align-items: center; gap: 0.5rem;';
         bubble.innerHTML = `
-            <div class="typing-indicator" style="display: flex; gap: 4px;">
+                < div class="typing-indicator" style = "display: flex; gap: 4px;" >
                 <span style="width: 6px; height: 6px; background: #d4a853; border-radius: 50%; animation: ping 1.4s infinite both;"></span>
                 <span style="width: 6px; height: 6px; background: #d4a853; border-radius: 50%; animation: ping 1.4s infinite both; animation-delay: 0.2s;"></span>
                 <span style="width: 6px; height: 6px; background: #d4a853; border-radius: 50%; animation: ping 1.4s infinite both; animation-delay: 0.4s;"></span>
-            </div>
+            </div >
             <p style="margin: 0; color: var(--text-secondary); font-size: 0.85rem;">Reviewing laws...</p>
             <style>@keyframes ping { 0%, 80%, 100% { transform: scale(0); } 40% { transform: scale(1); } }</style>
-        `;
+            `;
         historyDiv.appendChild(bubble);
         historyDiv.scrollTop = historyDiv.scrollHeight;
     }
