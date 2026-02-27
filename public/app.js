@@ -198,7 +198,7 @@ In sum, the mere fact that a scheme promised in court has later been suspended d
         { role: 'system', content: SYSTEM_PROMPT }
     ];
 
-    async function sendMessageToAI(userText) {
+    async function sendMessageToAI(userText, model) {
         chatHistory.push({ role: 'user', content: userText });
 
         try {
@@ -211,7 +211,7 @@ In sum, the mere fact that a scheme promised in court has later been suspended d
             const response = await fetch(API_PROXY, {
                 method: 'POST',
                 headers,
-                body: JSON.stringify({ messages: chatHistory })
+                body: JSON.stringify({ messages: chatHistory, model: model })
             });
 
             if (!response.ok) {
@@ -494,11 +494,14 @@ In sum, the mere fact that a scheme promised in court has later been suspended d
         if (caseDetailsField) caseDetailsField.value = '';
         if (questionField) questionField.value = '';
 
+        const aiModelSelect = $('#aiModel');
+        const selectedModel = aiModelSelect ? aiModelSelect.value : 'gpt-4o';
+
         appendUserMessage(combinedText);
         appendLoadingBubble();
 
         try {
-            const aiResponse = await sendMessageToAI(combinedText);
+            const aiResponse = await sendMessageToAI(combinedText, selectedModel);
             removeLoadingBubble();
             appendAIMessage(aiResponse);
         } catch (err) {
