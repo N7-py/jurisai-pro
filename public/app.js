@@ -198,7 +198,7 @@ In sum, the mere fact that a scheme promised in court has later been suspended d
         { role: 'system', content: SYSTEM_PROMPT }
     ];
 
-    async function sendMessageToAI(userText, model) {
+    async function sendMessageToAI(userText, model, reportType) {
         chatHistory.push({ role: 'user', content: userText });
 
         try {
@@ -211,7 +211,7 @@ In sum, the mere fact that a scheme promised in court has later been suspended d
             const response = await fetch(API_PROXY, {
                 method: 'POST',
                 headers,
-                body: JSON.stringify({ messages: chatHistory, model: model })
+                body: JSON.stringify({ messages: chatHistory, model: model, reportType: reportType })
             });
 
             if (!response.ok) {
@@ -486,9 +486,23 @@ In sum, the mere fact that a scheme promised in court has later been suspended d
         const reviewType = reviewTypeRadio ? reviewTypeRadio.value : 'exhaustive';
 
         if (reviewType === 'summarised') {
-            combinedText += `\n\n[ACTION REQUIRED: Generate a SUMMARISED report. You must provide a concise, highly focused 1-2 page summary of the legal position, while strictly adhering to the 10-section structure. Keep all answers brief but accurate.]`;
+            combinedText += `\n\n[REPORT MODE: SUMMARISED — Produce a concise 1-2 page summary. Follow the 10-section structure but keep each section to 2-4 sentences. Be precise, not verbose.]`;
         } else {
-            combinedText += `\n\n[ACTION REQUIRED: Generate an EXTREMELY EXHAUSTIVE report. You must provide an incredibly detailed, comprehensive legal research report equivalent to 10-15 pages in length. Expand aggressively on every single section with extreme depth, multiple massive paragraphs per issue, and exhaustive granular legal analysis. Leave no detail unexamined. Maximize the output length.]`;
+            combinedText += `\n\n[REPORT MODE: EXHAUSTIVE DEEP RESEARCH — This is your most important instruction. You MUST produce a comprehensive, court-ready legal report of AT LEAST 10-15 full pages. Follow every rule below without exception:
+
+MANDATORY MINIMUMS PER SECTION:
+- Section 1 (Executive Summary): minimum 3 paragraphs
+- Section 2 (Facts & Background): minimum 4 paragraphs, restate every fact systematically
+- Section 3 (Legal Issues): identify and number EVERY distinct legal issue, minimum 5 issues
+- Section 4 (Applicable Laws): for EACH issue cite the exact Act, exact Section, exact subsection text, and apply it to the facts — minimum 3 Acts cited total
+- Section 5 (Landmark Cases): cite MINIMUM 8 real Supreme Court or High Court judgments. For EACH case: (a) full citation with year, (b) 6-8 sentence case background, (c) exact statutory provisions used by the Court, (d) ratio decidendi, (e) detailed application to the present facts — minimum 4 sentences of application per case
+- Section 6 (Legal Analysis): minimum 6 paragraphs, argue BOTH sides of every issue
+- Section 7 (Rights & Obligations): enumerate EVERY right and obligation for EACH party separately
+- Section 8 (Risk Assessment): rate HIGH/MEDIUM/LOW with minimum 3 sentences of reasoning per party
+- Section 9 (Recommended Actions): provide at minimum 8 numbered action steps with timelines
+- Section 10 (Conclusion): minimum 3 paragraphs
+
+CRITICAL RULES: Never truncate. Never summarise when you can elaborate. Write every section to its full potential. This report must be indistinguishable from a senior advocate's written opinion.]`;
         }
 
         if (caseDetailsField) caseDetailsField.value = '';
@@ -501,7 +515,7 @@ In sum, the mere fact that a scheme promised in court has later been suspended d
         appendLoadingBubble();
 
         try {
-            const aiResponse = await sendMessageToAI(combinedText, selectedModel);
+            const aiResponse = await sendMessageToAI(combinedText, selectedModel, reviewType);
             removeLoadingBubble();
             appendAIMessage(aiResponse);
         } catch (err) {
