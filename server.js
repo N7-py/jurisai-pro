@@ -72,8 +72,17 @@ const DB_FILE = path.join(__dirname, 'database.json');
 
 // Parse JSON bodies
 app.use(express.json({ limit: '1mb' }));
-// Trust proxy if you are behind one (e.g. Render) to get real IPs
+// Trust proxy if you are behind one (e.g. Render/cPanel) to get real IPs
 app.set('trust proxy', 1);
+
+// ===== Force HTTPS redirect =====
+app.use((req, res, next) => {
+    const proto = req.headers['x-forwarded-proto'];
+    if (proto && proto !== 'https') {
+        return res.redirect(301, 'https://' + req.get('host') + req.url);
+    }
+    next();
+});
 
 // Serve static files (index.html, styles.css, app.js)
 app.use(express.static(path.join(__dirname, 'public')));
