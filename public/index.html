@@ -266,6 +266,19 @@
                             </div>
                         </div>
 
+                        <div style="display: flex; flex-direction: column; gap: 0.5rem; flex: 1;">
+                            <label for="aiModel" style="font-size: 0.9rem; font-weight: 500; color: #d4a853;">4. Select
+                                AI Model</label>
+                            <select id="aiModel"
+                                style="width: 100%; box-sizing: border-box; background: rgba(0,0,0,0.4); border: 1px solid rgba(255,255,255,0.1); border-radius: 8px; color: #fff; padding: 0.85rem; font-family: inherit; font-size: 0.9rem; appearance: none; cursor: pointer;">
+                                <option value="gpt-4o" style="color: #000;">GPT-4o (OpenAI Premium)</option>
+                                <option value="meta-llama/Meta-Llama-3-8B-Instruct" style="color: #000;">Meta Llama 3 8B
+                                    (Open Source)</option>
+                                <option value="Qwen/Qwen2.5-7B-Instruct" style="color: #000;">Qwen 2.5 7B (Open Source)
+                                </option>
+                            </select>
+                        </div>
+
                         <button id="chatSendBtn" class="btn btn-primary"
                             style="display: flex; align-items: center; justify-content: center; padding: 0 1.5rem; height: 56px; border-radius: 8px; margin-top: auto;">
                             <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor"
