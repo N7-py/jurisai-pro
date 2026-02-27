@@ -257,8 +257,9 @@ async function rateLimitMiddleware(req, res, next) {
 // Browser calls /api/chat → server checks rate limits → then calls LLM
 app.post('/api/chat', rateLimitMiddleware, async (req, res) => {
     try {
-        const { messages, model } = req.body;
+        const { messages, model, reportType } = req.body;
         const requestedModel = model || 'gpt-4o';
+        const isExhaustive = reportType !== 'summarised'; // default to exhaustive
 
         if (!messages || !Array.isArray(messages)) {
             return res.status(400).json({ error: 'Need an array of messages.' });
@@ -276,11 +277,11 @@ app.post('/api/chat', rateLimitMiddleware, async (req, res) => {
             const completion = await getOpenAI().chat.completions.create({
                 model: "gpt-4o",
                 messages: messages,
-                temperature: 0.15,      // Low temperature → factual, legally precise
-                max_tokens: 4096,       // Uncapped physical limit to support 10-15 page Exhaustive reports
-                top_p: 0.9,             // Focused vocabulary for legal language
-                frequency_penalty: 0.2, // Reduce repetitive phrasing
-                presence_penalty: 0.1,  // Encourage covering all required sections
+                temperature: isExhaustive ? 0.1 : 0.2,
+                max_tokens: isExhaustive ? 16384 : 2048, // 16384 = GPT-4o's actual max output
+                top_p: 0.9,
+                frequency_penalty: isExhaustive ? 0.1 : 0.2,
+                presence_penalty: isExhaustive ? 0.15 : 0.1,
             });
             completionResult = completion.choices[0].message.content;
         } else {
