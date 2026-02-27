@@ -291,7 +291,29 @@ app.post('/api/chat', rateLimitMiddleware, async (req, res) => {
                 });
             }
 
-            // Using standard OpenAI library configured for HF endpoints
+            // Compact system prompt for smaller open-source models (8B context limit)
+            const HF_SYSTEM_PROMPT = `You are JurisAI Pro, an AI legal assistant specializing in Indian Law.
+For every query produce a structured legal report with these sections:
+1. Executive Summary
+2. Facts & Background
+3. Legal Issues Identified
+4. Applicable Laws & Provisions (cite exact Acts and Sections)
+5. Landmark Case References (cite at least 3 real Indian cases with ratio decidendi)
+6. Detailed Legal Analysis
+7. Rights & Obligations
+8. Risk Assessment (HIGH/MEDIUM/LOW per party)
+9. Recommended Course of Action
+10. Conclusion
+Always use professional legal language. Cite exact Section numbers and real verifiable case law.`;
+
+            // Keep only recent messages and replace system prompt to stay within context limits
+            const nonSystemMessages = messages.filter(m => m.role !== 'system');
+            const recentMessages = nonSystemMessages.slice(-6); // last 6 messages max
+            const compactMessages = [
+                { role: 'system', content: HF_SYSTEM_PROMPT },
+                ...recentMessages
+            ];
+
             const hfOpenAI = new OpenAI({
                 apiKey: process.env.HF_API_TOKEN,
                 baseURL: "https://router.huggingface.co/v1/"
@@ -299,9 +321,9 @@ app.post('/api/chat', rateLimitMiddleware, async (req, res) => {
 
             const completion = await hfOpenAI.chat.completions.create({
                 model: requestedModel,
-                messages: messages,
-                temperature: 0.15,
-                max_tokens: 4096,
+                messages: compactMessages,
+                temperature: 0.2,
+                max_tokens: 2048,
                 top_p: 0.9,
             });
             completionResult = completion.choices[0].message.content;
