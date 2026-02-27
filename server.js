@@ -253,36 +253,65 @@ async function rateLimitMiddleware(req, res, next) {
 }
 
 // ===== Proxy endpoint =====
-// Browser calls /api/chat → server checks rate limits → then calls OpenAI
+// ===== Proxy endpoint =====
+// Browser calls /api/chat → server checks rate limits → then calls LLM
 app.post('/api/chat', rateLimitMiddleware, async (req, res) => {
     try {
-        if (!OPENAI_API_KEY) {
-            return res.status(500).json({
-                error: 'Server OPENAI_API_KEY not configured. Set it in .env or Render.'
-            });
-        }
-
-        const { messages } = req.body;
+        const { messages, model } = req.body;
+        const requestedModel = model || 'gpt-4o';
 
         if (!messages || !Array.isArray(messages)) {
             return res.status(400).json({ error: 'Need an array of messages.' });
         }
 
-        const completion = await getOpenAI().chat.completions.create({
-            model: "gpt-4o",
-            messages: messages,
-            temperature: 0.15,      // Low temperature → factual, legally precise
-            max_tokens: 4096,       // Uncapped physical limit to support 10-15 page Exhaustive reports
-            top_p: 0.9,             // Focused vocabulary for legal language
-            frequency_penalty: 0.2, // Reduce repetitive phrasing
-            presence_penalty: 0.1,  // Encourage covering all required sections
-        });
+        let completionResult = '';
 
-        res.json({ result: completion.choices[0].message.content });
+        if (requestedModel === 'gpt-4o') {
+            if (!OPENAI_API_KEY) {
+                return res.status(500).json({
+                    error: 'Server OPENAI_API_KEY not configured. Set it in .env or Render.'
+                });
+            }
+
+            const completion = await getOpenAI().chat.completions.create({
+                model: "gpt-4o",
+                messages: messages,
+                temperature: 0.15,      // Low temperature → factual, legally precise
+                max_tokens: 4096,       // Uncapped physical limit to support 10-15 page Exhaustive reports
+                top_p: 0.9,             // Focused vocabulary for legal language
+                frequency_penalty: 0.2, // Reduce repetitive phrasing
+                presence_penalty: 0.1,  // Encourage covering all required sections
+            });
+            completionResult = completion.choices[0].message.content;
+        } else {
+            // Open Source via Hugging Face
+            if (!process.env.HF_API_TOKEN) {
+                return res.status(500).json({
+                    error: 'Server HF_API_TOKEN not configured. Set it in .env to use open source models.'
+                });
+            }
+
+            // Using standard OpenAI library configured for HF endpoints
+            const hfOpenAI = new OpenAI({
+                apiKey: process.env.HF_API_TOKEN,
+                baseURL: "https://router.huggingface.co/v1/"
+            });
+
+            const completion = await hfOpenAI.chat.completions.create({
+                model: requestedModel,
+                messages: messages,
+                temperature: 0.15,
+                max_tokens: 4096,
+                top_p: 0.9,
+            });
+            completionResult = completion.choices[0].message.content;
+        }
+
+        res.json({ result: completionResult });
 
     } catch (err) {
-        console.error('OpenAI Proxy error:', err.message);
-        res.status(500).json({ error: 'Server error. Please try again.' });
+        console.error('LLM Proxy error:', err.message);
+        res.status(500).json({ error: 'Server error. Please try again. ' + (err.message || '') });
     }
 });
 
