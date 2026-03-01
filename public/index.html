@@ -272,10 +272,20 @@
                             <select id="aiModel"
                                 style="width: 100%; box-sizing: border-box; background: rgba(0,0,0,0.4); border: 1px solid rgba(255,255,255,0.1); border-radius: 8px; color: #fff; padding: 0.85rem; font-family: inherit; font-size: 0.9rem; appearance: none; cursor: pointer;">
                                 <option value="gpt-4o" style="color: #000;">GPT-4o (OpenAI Premium)</option>
-                                <option value="meta-llama/Meta-Llama-3-8B-Instruct" style="color: #000;">Meta Llama 3 8B
-                                    (Open Source)</option>
-                                <option value="Qwen/Qwen2.5-7B-Instruct" style="color: #000;">Qwen 2.5 7B (Open Source)
-                                </option>
+                                <optgroup label="Legal-Optimized Models" style="color: #000;">
+                                    <option value="mistralai/Mistral-7B-Instruct-v0.3" style="color: #000;">Mistral 7B Instruct (Legal Reasoning)</option>
+                                    <option value="meta-llama/Llama-3.1-8B-Instruct" style="color: #000;">Llama 3.1 8B (Enhanced)</option>
+                                    <option value="microsoft/Phi-3.5-mini-instruct" style="color: #000;">Phi-3.5 Mini (Efficient)</option>
+                                </optgroup>
+                                <optgroup label="General Purpose Open Source" style="color: #000;">
+                                    <option value="meta-llama/Meta-Llama-3-8B-Instruct" style="color: #000;">Meta Llama 3 8B (Open Source)</option>
+                                    <option value="Qwen/Qwen2.5-7B-Instruct" style="color: #000;">Qwen 2.5 7B (Multilingual)</option>
+                                    <option value="google/gemma-2-9b-it" style="color: #000;">Gemma 2 9B (Google)</option>
+                                </optgroup>
+                                <optgroup label="Specialized Models" style="color: #000;">
+                                    <option value="NousResearch/Hermes-3-Llama-3.1-8B" style="color: #000;">Hermes 3 Llama 3.1 (Reasoning)</option>
+                                    <option value="mistralai/Mixtral-8x7B-Instruct-v0.1" style="color: #000;">Mixtral 8x7B (Advanced)</option>
+                                </optgroup>
                             </select>
                         </div>
 
