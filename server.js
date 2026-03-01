@@ -287,7 +287,7 @@ app.post('/api/chat', rateLimitMiddleware, async (req, res) => {
                 model: "gpt-4o",
                 messages: messages,
                 temperature: isExhaustive ? 0.1 : 0.2,
-                max_tokens: isExhaustive ? 16384 : 2048, // 16384 = GPT-4o's actual max output
+                max_tokens: isExhaustive ? 16000 : 4000, // Increased: 16K for exhaustive, 4K for summarised
                 top_p: 0.9,
                 frequency_penalty: isExhaustive ? 0.1 : 0.2,
                 presence_penalty: isExhaustive ? 0.15 : 0.1,
@@ -333,7 +333,7 @@ Always use professional legal language. Cite exact Section numbers and real veri
                 model: requestedModel,
                 messages: compactMessages,
                 temperature: 0.2,
-                max_tokens: 2048,
+                max_tokens: isExhaustive ? 8000 : 2048, // Increased: 8K for exhaustive, 2K for summarised
                 top_p: 0.9,
             });
             completionResult = completion.choices[0].message.content;
